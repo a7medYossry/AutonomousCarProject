@@ -1,0 +1,36 @@
+# Ignore Eclipse/AVR specific settings
+.settings/
+.project
+.cproject
+
+# Ignore build directories
+Debug/
+
+# Ignore temporary files
+*.tmp
+*.log
+*.swp
+*.bak
+
+# Ignore object files and executable files
+*.o
+*.out
+*.exe
+
+# Ignore compiled libraries
+*.lib
+*.a
+*.so
+*.dll
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files and project settings
+.vscode/
+.idea/
+*.suo
+*.user
+*.vcxproj
+*.vcxproj.filters
