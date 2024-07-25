@@ -119,10 +119,15 @@ void Backward_Move()
 void Turn_Right()
 {
 	Start_motor(MOTOR_A,DIRECTION_CW);
-	STop_motor(MOTOR_B);
+	Start_motor(MOTOR_B,DIRECTION_CCW);
 }
 void Turn_Left()
 {
 	Start_motor(MOTOR_B,DIRECTION_CW);
+	Start_motor(MOTOR_A,DIRECTION_CCW);
+}
+void Stop_Move()
+{
 	STop_motor(MOTOR_A);
+	STop_motor(MOTOR_B);
 }
