@@ -31,50 +31,10 @@
 #include "../FreeRTOS.h"
 #include "../task.h"
 
-void LED1 (void)
-{
-	while(1)
-	{
-		vTOGGLE_Pin(PORT_C,PIN_7);//
-		vTaskDelay(1000);
-	}
-}
-void LED0 (void)
-{
-	while(1)
-	{
-		vTOGGLE_Pin(PORT_C,PIN_2);
-		vTaskDelay(3000);
-	}
-}
 
-
-void LED2 (void)
-{
-	while(1)
-	{
-		vTOGGLE_Pin(PORT_D,PIN_3);
-		vTaskDelay(2000);
-	}
-}
-
-
-void func (void)
-{
-	vTOGGLE_Pin(PORT_C,PIN_7);
-
-}
-//MASTER
 int main()
 {
-	vSet_Pin_Direction(PORT_C,PIN_2,OUTPUT);
-	vSet_Pin_Direction(PORT_C,PIN_7,OUTPUT);
-	vSet_Pin_Direction(PORT_D,PIN_3,OUTPUT);
-	//vSet_Pin_OUTPUTvalue(PORT_A,PIN_3,OUTPUT);
-	xTaskCreate(&LED1,NULL,150,NULL,1,NULL);
-	xTaskCreate(&LED0,NULL,150,NULL,2,NULL);
-	xTaskCreate(&LED2,NULL,150,NULL,3,NULL);
-	vTaskStartScheduler();
+	
 	while(1)
 	{
 
