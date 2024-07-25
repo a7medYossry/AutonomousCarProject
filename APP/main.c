@@ -13,8 +13,6 @@
 #include "../HAL/LCD/LCD_Interface.h"
 #include "../HAL/LCD/LCD_Confg.h"
 
-#include "../HAL/KEYPAD/KEYPAD_CONF.h"
-#include "../HAL/KEYPAD/KEYPAD_interface.h"
 #include "../FreeRTOS.h"
 #include "../task.h"
 #include "../HAL/MOTOR/MOTOR_CONF.h"
@@ -28,8 +26,7 @@ int main()
 	{
 		Forward_Move();
 		_delay_ms(1000);
-		STop_motor(MOTOR_A);
-		STop_motor(MOTOR_B);
+		Stop_Move();
 		_delay_ms(1000);
 		Backward_Move();
 		_delay_ms(1000);
