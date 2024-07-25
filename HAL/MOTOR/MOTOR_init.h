@@ -18,6 +18,7 @@
 void Start_motor(u8 motorID,u8 Direction);
 void STop_motor(u8 motorID);
 
+void Stop_Move();
 void Forward_Move();
 void Backward_Move();
 void Turn_Left();
