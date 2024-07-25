@@ -21,6 +21,8 @@
 
 int main()
 {
+	vLCD_init();
+	vLCD_Send_String("kaml2w3w");
 
 	while (1)
 	{

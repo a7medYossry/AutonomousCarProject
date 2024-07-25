@@ -1,58 +1,70 @@
 #include "../../LIB/BIT_MATH.h"
 #include "../../LIB/STD_TYPES.h"
-#include "ultrasonic.h"  // Include custom ultrasonic sensor header
-#include "DIO_Interface.h" // Include the DIO interface header
+#include <util/delay.h>
+#include "ultrasonic.h"
+#include "../../MCAL/DIO/DIO_Interface.h"
+#include "../../FreeRTOS.h"
+#include "../../task.h"
+#include "../../timers.h"
 
 // Function to send trigger pulse to the ultrasonic sensor
 void send_trigger_pulse() {
-    // Set TRIG_PIN low
     vSet_Pin_OUTPUTvalue(TRIG_PORT, TRIG_PIN, LOW);
-    _delay_us(2);  // Short delay to ensure a clean low pulse
-
-    // Set TRIG_PIN high for 10 microseconds
+    vTaskDelay(pdMS_TO_TICKS(1));
     vSet_Pin_OUTPUTvalue(TRIG_PORT, TRIG_PIN, HIGH);
-    _delay_us(10);
-
-    // Set TRIG_PIN low again to end the trigger pulse
+    vTaskDelay(pdMS_TO_TICKS(1));
     vSet_Pin_OUTPUTvalue(TRIG_PORT, TRIG_PIN, LOW);
 }
 
 // Function to read the echo pulse and calculate distance
 u16 read_echo_pulse() {
-    // Wait for the echo pin to go high (start of pulse)
-    while (vGIT_PIN(ECHO_PORT, ECHO_PIN) == LOW);
-
-    // Reset Timer1 counter
-    TCNT1 = 0;
-
-    // Start Timer1 with prescaler 64 (CS11 and CS10 bits set)
-    TCCR1B |= (1 << CS11) | (1 << CS10);
-
-    // Wait for the echo pin to go low (end of pulse)
-    while (vGIT_PIN(ECHO_PORT, ECHO_PIN) == HIGH);
-
-    // Stop Timer1
-    TCCR1B &= ~((1 << CS11) | (1 << CS10));
-
-    // Read Timer1 value (pulse width in timer ticks)
-    u16 pulse_width = TCNT1;
-
-    // Convert pulse width to distance in centimeters
-    // For 16MHz clock with 64 prescaler, one tick is 4µs
-    // Sound travels at 343m/s, so it takes 58µs to travel 1cm (round trip)
-    // Therefore, distance = (pulse_width * 4) / 58
-    return (pulse_width * 4) / 58;
+    TickType_t start, end;
+    
+    while (vGIT_PIN(ECHO_PORT, ECHO_PIN) == LOW) {
+        // Wait for rising edge
+    }
+    start = xTaskGetTickCount();
+    
+    while (vGIT_PIN(ECHO_PORT, ECHO_PIN) == HIGH) {
+        // Wait for falling edge
+    }
+    end = xTaskGetTickCount();
+    
+    // Calculate duration in milliseconds
+    u16 duration = (end - start) * portTICK_PERIOD_MS;
+    
+    // Calculate distance: duration / 58 gives distance in cm
+    return duration / 58;
 }
 
-// Initialization function (call this in your main() before using the sensor)
+// Initialization function
 void ultrasonic_init() {
-    // Set TRIG_PIN as output
     vSet_Pin_Direction(TRIG_PORT, TRIG_PIN, OUTPUT);
-    
-    // Set ECHO_PIN as input
     vSet_Pin_Direction(ECHO_PORT, ECHO_PIN, INPUT);
+}
 
-    // Initialize Timer1
-    TCCR1A = 0; // Set Timer1 to normal mode
-    TCCR1B = 0; // Clear prescaler settings
+// Task to handle ultrasonic sensor readings
+void vUltrasonicTask(void *pvParameters) {
+    u16 distance;
+    
+    ultrasonic_init();
+    
+    for(;;) {
+        send_trigger_pulse();
+        distance = read_echo_pulse();
+        
+        // Do something with the distance value
+        
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
+}
+
+int main(void) {
+    // Other initializations...
+    
+    xTaskCreate(vUltrasonicTask, "Ultrasonic", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+    
+    vTaskStartScheduler();
+    
+    for(;;);  // Should never get here
 }
