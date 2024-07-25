@@ -12,7 +12,8 @@
 /***********************************************TIMER0*******************/
 #define TIMER0_PRESCALLER               TIMER0_SCALER_64
 
-#define TIMER0_MODE                     TIMER0_CTC_MODE
+#define TIMER0_MODE                     TIMER0_NORMAL_MODE
+
 
 
 #define TIMER0_COMPARE_MATCH_MODE        OC0_NON_INVERTING

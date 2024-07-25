@@ -15,4 +15,5 @@
 #define ECHO_PIN PIN_0  // Echo pin on PORTD0
 #define ECHO_PORT PORT_D
 
+
 #endif /* HAL_ULTRASONIC_ULTRASONIC_H_ */
