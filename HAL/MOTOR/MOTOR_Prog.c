@@ -104,7 +104,25 @@ void STop_motor(u8 motorID)
 
 	}
 }
-void speed_control (u8 motorID,u8 Direction , u8 duty_cycle)
+
+void Forward_Move()
 {
-    // you complet this code
+	Start_motor(MOTOR_A,DIRECTION_CW);
+	Start_motor(MOTOR_B,DIRECTION_CW);
+}
+void Backward_Move()
+{
+	Start_motor(MOTOR_A,DIRECTION_CCW);
+	Start_motor(MOTOR_B,DIRECTION_CCW);
+
+}
+void Turn_Right()
+{
+	Start_motor(MOTOR_A,DIRECTION_CW);
+	STop_motor(MOTOR_B);
+}
+void Turn_Left()
+{
+	Start_motor(MOTOR_B,DIRECTION_CW);
+	STop_motor(MOTOR_A);
 }

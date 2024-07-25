@@ -17,6 +17,10 @@
 
 void Start_motor(u8 motorID,u8 Direction);
 void STop_motor(u8 motorID);
-void speed_control (u8 motorID,u8 Direction,u8 duty_cycle);
+
+void Forward_Move();
+void Backward_Move();
+void Turn_Left();
+void Turn_Right();
 
 #endif /* HAL_MOTOR_MOTOR_INIT_H_ */
