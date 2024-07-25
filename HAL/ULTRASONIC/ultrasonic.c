@@ -19,6 +19,7 @@ void timer_overflow_callback(void)
 }
 void ultrasonic_init()
 {
+    vSet_Pin_Direction(PORT_C, PIN_1, OUTPUT);
     vSet_Pin_Direction(PORT_C, PIN_2, OUTPUT);
     vSet_Pin_Direction(TRIG_PORT, TRIG_PIN, OUTPUT);
     vSet_Pin_Direction(ECHO_PORT, ECHO_PIN, INPUT);
@@ -53,7 +54,7 @@ u16 read_echo_pulse()
             return 0; // Return 0 if no echo is received
         }
     }
-    vSet_Pin_OUTPUTvalue(PORT_C, PIN_2, HIGH);
+//    vSet_Pin_OUTPUTvalue(PORT_C, PIN_2, HIGH);
 
     // Reset and start timer
     g_timer_count = 0;
@@ -67,21 +68,20 @@ u16 read_echo_pulse()
     {
 
         timeout++;
-        if (timeout > 30000)
+        if (timeout > 300000)
         { // Timeout after about 30ms
             _delay_ms(1000);
-            vSet_Pin_OUTPUTvalue(PORT_C, PIN_2, LOW);
             _delay_ms(1000);
             break;
         }
     }
 
-    vTIMER0_STOP();
+     vTIMER0_STOP();
     pulse_duration = (g_timer_count * 256 + TCNT0) * TIMER0_TICK_TIME;
-
+    
     // Calculate pulse duration
 
     // Calculate distance in cm
     // Sound travels at 343m/s, so it takes 58µs to travel 1cm (round trip)
-    return TCNT0;
+    return pulse_duration/58;
 }

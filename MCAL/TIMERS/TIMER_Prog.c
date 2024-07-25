@@ -6,6 +6,9 @@
  */
 #include "../../LIB/BIT_MATH.h"
 #include "../../LIB/STD_TYPES.h"
+#include "../../MCAL/DIO/DIO_Interface.h"
+#include "../../MCAL/DIO/DIO_CONF.h"
+#include "util/delay.h"
 #include "TIMER_init.h"
 #include "TIMER_confg.h"
 #include "TIMER_praivat.h"
@@ -119,6 +122,11 @@ void __vector_11 (void){
 
 	if(TIMER0_OF_callback!=NULLPTR)
 		TIMER0_OF_callback();
+//	_delay_ms(1000);
+	vTOGGLE_Pin (PORT_C, PIN_2);
+//	_delay_ms(1000);
+	// TIFR |= (0 << TOV0);
+
 
 }
 

@@ -36,6 +36,9 @@
 #define OCIE0   1
 #define TOIE0   0
 
+/*TIFR*/
+#define TOV0 0
+
 #define OCR0    (*(volatile unsigned char*)0x5C)
 
 
