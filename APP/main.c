@@ -1,64 +1,59 @@
-/*
- * main.c
- *
- *  Created on: Apr 6, 2024
- *      Author: Mahmoud
- *      APP LAYER MAIN.C
- */
-#include "../LIB/STD_TYPES.h"
-#include "../LIB/BIT_MATH.h"
-#include "../MCAL/DIO/DIO_Interface.h"
-#include "../MCAL/DIO/DIO_CONF.h"
-#include "../MCAL/TIMERS/TIMER_confg.h"
-#include "../MCAL/TIMERS/TIMER_init.h"
-#include "../MCAL/TIMERS/TIMER_praivat.h"
-
-#include "../HAL/LCD/LCD_Interface.h"
-#include "../HAL/LCD/LCD_Confg.h"
-
-#include "../HAL/ULTRASONIC/ultrasonic.h"
-
-#include "../HAL/MOTOR/MOTOR_CONF.h"
-#include "../HAL/MOTOR/MOTOR_init.h"
-#include "util/delay.h"
+#include "main.h"
 
 int main()
 {
-	vGlobal_interrupt_Enable();
-	u16 distance = 0;
-	vLCD_init();
-	ultrasonic_init();
+    vGlobal_interrupt_Enable();
+    servo_init();
+    vLCD_init();
+    ultrasonic_init();
 
+    u16 Forward_distance = 0;
+    u16 Right_distance = 0;
+    u16 Left_distance = 0;
 
+    while (1)
+    {
+        send_trigger_pulse();
+        Forward_distance = read_echo_pulse();
+        _delay_ms(1000);
 
-	while (1)
-	{
-				// _delay_ms(1000);
+        if (Forward_distance < OBSTACLE_THRESHOLD)
+        {
+            Stop_Move();
+            vLCD_Clear();
+            vLCD_Send_String("Stop Move");
+            _delay_ms(1000);
 
-			send_trigger_pulse();
+            servo_set_angle(0);
+            send_trigger_pulse();
+            Right_distance = read_echo_pulse();
+            _delay_ms(1000);
 
-		distance = read_echo_pulse();
-			vLCD_Convert_numTOchar(distance);
-		// send_trigger_pulse();
+            servo_set_angle(180);
+            send_trigger_pulse();
+            Left_distance = read_echo_pulse();
+            _delay_ms(1000);
 
-		// distance = read_echo_pulse();
-		// vLCD_Convert_numTOchar(distance);
-		_delay_ms(1000);
+            servo_set_angle(90);
+            _delay_ms(1000);
 
-		vLCD_Clear();
-		_delay_ms(1000);
-//		vTIMER0_STOP();
+            if (Left_distance > Right_distance)
+            {
+                vLCD_Clear();
+                vLCD_Send_String("Turn Left");
+                Turn_Left();
+            }
+            else
+            {
+                vLCD_Clear();
+                vLCD_Send_String("Turn Right");
+                Turn_Right();
+            }
 
-
-		// 	Forward_Move();
-		// 	_delay_ms(1000);
-		// 	Stop_Move();
-		// 	_delay_ms(1000);
-		// 	Backward_Move();
-		// 	_delay_ms(1000);
-		// 	Turn_Right();
-		// 	_delay_ms(1000);
-		// 	Turn_Left();
-		// 	_delay_ms(1000);
-	}
+            _delay_ms(1000);
+            Forward_Move();
+            vLCD_Clear();
+            vLCD_Send_String("Forward Move");
+        }
+    }
 }

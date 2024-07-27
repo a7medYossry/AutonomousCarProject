@@ -122,12 +122,6 @@ void __vector_11 (void){
 
 	if(TIMER0_OF_callback!=NULLPTR)
 		TIMER0_OF_callback();
-//	_delay_ms(1000);
-	vTOGGLE_Pin (PORT_C, PIN_2);
-//	_delay_ms(1000);
-	// TIFR |= (0 << TOV0);
-
-
 }
 
 void __vector_10 (void) __attribute__ ((signal,used, externally_visible)) ; \
@@ -349,5 +343,100 @@ void __vector_6 (void){
 
 }
 
+/*********************************Timer 2 Call Back functions*****************************************/
 
 
+void (*TIMER2_OF_callback)(void) = NULLPTR;
+void (*TIMER2_OC_callback)(void) = NULLPTR;
+
+void vTIMER2_INIT(void)
+{
+#if TIMER2_MODE == TIMER2_NORMAL_MODE
+    CLEAR_BIT(TCCR2, WGM21);
+    CLEAR_BIT(TCCR2, WGM20);
+    // ENABLE PIE OVER FLOW
+    SET_BIT(TIMSK, TOIE2);
+#elif TIMER2_MODE == TIMER2_PHASECORRECT_MODE
+    CLEAR_BIT(TCCR2, WGM21);
+    SET_BIT(TCCR2, WGM20);
+
+#if TIMER2_COMPARE_MATCH_MODE == OC2_DISCONNECTED
+    CLEAR_BIT(TCCR2, COM20);
+    CLEAR_BIT(TCCR2, COM21);
+#elif TIMER2_COMPARE_MATCH_MODE == OC2_NON_INVERTING
+    CLEAR_BIT(TCCR2, COM20);
+    SET_BIT(TCCR2, COM21);
+#elif TIMER2_COMPARE_MATCH_MODE == OC2_INVERTING
+    SET_BIT(TCCR2, COM20);
+    SET_BIT(TCCR2, COM21);
+#endif
+
+#elif TIMER2_MODE == TIMER2_CTC_MODE
+    SET_BIT(TCCR2, WGM21);
+    CLEAR_BIT(TCCR2, WGM20);
+    // ENABLE PIE COMPARE MATCH
+    SET_BIT(TIMSK, OCIE2);
+
+#elif TIMER2_MODE == TIMER2_FASTPWM_MODE
+    SET_BIT(TCCR2, WGM21);
+    SET_BIT(TCCR2, WGM20);
+#if TIMER2_COMPARE_MATCH_MODE == OC2_DISCONNECTED
+    CLEAR_BIT(TCCR2, COM20);
+    CLEAR_BIT(TCCR2, COM21);
+#elif TIMER2_COMPARE_MATCH_MODE == OC2_NON_INVERTING
+    CLEAR_BIT(TCCR2, COM20);
+    SET_BIT(TCCR2, COM21);
+#elif TIMER2_COMPARE_MATCH_MODE == OC2_INVERTING
+    SET_BIT(TCCR2, COM20);
+    SET_BIT(TCCR2, COM21);
+#endif
+
+#endif
+}
+
+void vTIMER2_START(void)
+{
+    TCCR2 = TCCR2 & 0b11111000;
+    TCCR2 = TCCR2 | TIMER2_PRESCALLER;
+}
+
+void vTIMER2_STOP(void)
+{
+    CLEAR_BIT(TCCR2, CS22);
+    CLEAR_BIT(TCCR2, CS21);
+    CLEAR_BIT(TCCR2, CS20);
+}
+
+void vTIMER2_preload(u8 preload)
+{
+    if (preload <= 255)
+        TCNT2 = preload;
+}
+
+void vTIMER2_Compare_OCR2(u8 OCR)
+{
+    if (OCR <= 255)
+        OCR2 = OCR;
+}
+
+void vTIMER2_OF_CallBack(void(*Fptr)(void))
+{
+    TIMER2_OF_callback = Fptr;
+}
+
+void vTIMER2_OC_CallBack(void(*Fptr)(void))
+{
+    TIMER2_OC_callback = Fptr;
+}
+
+void __vector_5 (void) __attribute__ ((signal,used, externally_visible));
+void __vector_5 (void){
+    if(TIMER2_OF_callback != NULLPTR)
+        TIMER2_OF_callback();
+}
+
+void __vector_4 (void) __attribute__ ((signal,used, externally_visible));
+void __vector_4 (void){
+    if(TIMER2_OC_callback != NULLPTR)
+        TIMER2_OC_callback();
+}

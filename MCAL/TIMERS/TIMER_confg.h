@@ -28,5 +28,13 @@
 
 /***********************************************TIMER2*******************/
 
+#define TIMER2_PRESCALLER               TIMER1_SCALER_1024
+
+#define TIMER2_MODE                     TIMER2_FASTPWM_MODE
+
+
+
+#define TIMER2_COMPARE_MATCH_MODE        OC2_NON_INVERTING
+
 
 #endif /* MCAL_TIMERS_TIMER_CONFG_H_ */

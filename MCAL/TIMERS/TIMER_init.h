@@ -150,5 +150,51 @@ void Timer1_ICU_SetCallBack(void(*LocalFptr)(void));
 
 
 
+#define		TIMER2_SCALER_1     	 1
+#define		TIMER2_SCALER_8    		 2
+#define	    TIMER2_SCALER_64 		 3
+#define 	TIMER2_SCALER_256        4
+#define 	TIMER2_SCALER_1024       5
+#define 	EXTERNALl_FALLING        6
+#define 	EXTERNAL_RISING          7
+
+
+#define		TIMER2_NORMAL_MODE        0
+#define		TIMER2_PHASECORRECT_MODE  1
+#define		TIMER2_CTC_MODE           2
+#define		TIMER2_FASTPWM_MODE       3
+
+
+
+
+
+
+
+
+#define	OC2_DISCONNECTED   0
+#define	RESERVED           1
+#define	OC2_NON_INVERTING  2
+#define OC2_INVERTING      3
+
+
+
+
+void vTIMER2_INIT(void);
+
+
+void vTIMER2_START(void);
+
+void vTIMER2_STOP(void);
+
+void vTIMER2_preload(u8 preload);
+
+void vTIMER2_Compare_OCR0(u8 OCR);
+
+
+void vTIMER2_OF_CallBack(void(*Fptr)(void));
+
+void vTIMER2_OC_CallBack(void(*Fptr)(void));
+
+
 
 #endif /* MCAL_TIMERS_TIMER_INIT_H_ */

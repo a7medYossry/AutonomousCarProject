@@ -98,7 +98,36 @@
 
 /*************************TIMER2*************************/
 
+/* Timer 2 */
+#define TCNT2   (*(volatile unsigned char*)0x44)
+#define TCCR2   (*(volatile unsigned char*)0x45)
+/* TCCR2 */
+#define FOC2    7
+#define WGM20   6
+#define COM21   5
+#define COM20   4
+#define WGM21   3
+#define CS22    2
+#define CS21    1
+#define CS20    0
 
+#define OCR2    (*(volatile unsigned char*)0x43)
+
+/* TIMSK (already defined in your code, but here are the Timer 2 specific bits) */
+#define OCIE2   7
+#define TOIE2   6
+
+/* TIFR (already defined in your code, but here are the Timer 2 specific bits) */
+#define OCF2    7
+#define TOV2    6
+
+/* ASSR - Asynchronous Status Register (specific to Timer 2) */
+#define ASSR    (*(volatile unsigned char*)0x42)
+/* ASSR */
+#define AS2     3
+#define TCN2UB  2
+#define OCR2UB  1
+#define TCR2UB  0
 
 
 #endif /* MCAL_TIMERS_TIMER_PRAIVAT_H_ */
