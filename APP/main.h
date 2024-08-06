@@ -32,6 +32,9 @@
 
 #define OBSTACLE_THRESHOLD 20  // Distance in cm to consider as an obstacle
 
+#define TURN_DELAY 2000
+#define SERVO_DELAY 4000
+#define MOVE_DELAY 1000
 
 
 #endif /* APP_MAIN_H_ */

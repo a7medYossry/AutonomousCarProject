@@ -27,23 +27,23 @@ void servo_init(void)
 	// Set prescaler to 64
 	//vTIMER2_START();
 }
-void servo_set_angle(u16 angle)
+void servo_set_angle( s16 angle)
 {
 	switch (angle)
 	{
+	case -90:
+		vSet_Pin_OUTPUTvalue(PORT_D, PIN_7, HIGH);
+		_delay_us(500);
+		vSet_Pin_OUTPUTvalue(PORT_D, PIN_7, LOW);
+		_delay_us(19500);
+		break;
 	case 0:
 		vSet_Pin_OUTPUTvalue(PORT_D, PIN_7, HIGH);
-		_delay_ms(1);
+		_delay_us(1005);
 		vSet_Pin_OUTPUTvalue(PORT_D, PIN_7, LOW);
-		_delay_ms(19);
+		_delay_us(18995);
 		break;
 	case 90:
-		vSet_Pin_OUTPUTvalue(PORT_D, PIN_7, HIGH);
-		_delay_us(1350);
-		vSet_Pin_OUTPUTvalue(PORT_D, PIN_7, LOW);
-		_delay_us(18650);
-		break;
-	case 180:
 		vSet_Pin_OUTPUTvalue(PORT_D, PIN_7, HIGH);
 		_delay_us(2000);
 		vSet_Pin_OUTPUTvalue(PORT_D, PIN_7, LOW);
