@@ -32,9 +32,10 @@
 
 #define OBSTACLE_THRESHOLD 20  // Distance in cm to consider as an obstacle
 
-#define TURN_DELAY 2000
-#define SERVO_DELAY 4000
-#define MOVE_DELAY 1000
+// Define constants for delay durations (in milliseconds)
+#define TURN_DELAY 2000    // Delay after turning
+#define SERVO_DELAY 4000   // Delay for servo movement and distance calculation
+#define MOVE_DELAY 1000    // General movement delay
 
 
 #endif /* APP_MAIN_H_ */
